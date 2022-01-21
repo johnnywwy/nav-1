@@ -1,0 +1,8 @@
+{
+  "name": "nav-1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:johnnywwy/nav-1.git",
+  "author": "johnnywwy <johnnywwy@gmail.com>",
+  "license": "MIT"
+}

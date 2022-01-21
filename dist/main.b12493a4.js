@@ -5,8 +5,6 @@
 //
 // anything defined in a previous bundle is accessed via the
 // orig method which is the require for previous bundles
-
-// eslint-disable-next-line no-global-assign
 parcelRequire = (function (modules, cache, entry, globalName) {
   // Save the require from previous bundle to this closure if any
   var previousRequire = typeof parcelRequire === 'function' && parcelRequire;
@@ -42,6 +40,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
       }
 
       localRequire.resolve = resolve;
+      localRequire.cache = {};
 
       var module = cache[name] = new newRequire.Module(name);
 
@@ -76,8 +75,16 @@ parcelRequire = (function (modules, cache, entry, globalName) {
     }, {}];
   };
 
+  var error;
   for (var i = 0; i < entry.length; i++) {
-    newRequire(entry[i]);
+    try {
+      newRequire(entry[i]);
+    } catch (e) {
+      // Save first error but execute all entries
+      if (!error) {
+        error = e;
+      }
+    }
   }
 
   if (entry.length) {
@@ -102,63 +109,78 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   // Override the current require with this new one
+  parcelRequire = newRequire;
+
+  if (error) {
+    // throw error from earlier, _after updating parcelRequire_
+    throw error;
+  }
+
   return newRequire;
 })({"epB2":[function(require,module,exports) {
 var $siteList = $('.siteList');
 var $lastLi = $siteList.find('li.last');
 var x = localStorage.getItem('x');
 var xObject = JSON.parse(x);
-
-window.hashMap = xObject || [{ logo: 'A', url: 'https://www.acfun.cn' }, { logo: 'B', url: 'https://bilibili.com' }];
+window.hashMap = xObject || [{
+  logo: 'A',
+  url: 'https://www.acfun.cn'
+}, {
+  logo: 'B',
+  url: 'https://bilibili.com'
+}];
 
 var simplifyUrl = function simplifyUrl(url) {
-    return url.replace('https://', '').replace('http://', '').replace('www.', '').replace(/\/.*/, '');
+  return url.replace('https://', '').replace('http://', '').replace('www.', '').replace(/\/.*/, '');
 };
 
 var render = function render() {
-    $siteList.find('li:not(.last)').remove();
-    hashMap.forEach(function (node, index) {
-        var $li = $('<li>\n            <div class="site">\n                <div class="logo">' + node.logo + '</div>\n                <div class="link">' + simplifyUrl(node.url) + '</div>\n                <div class="close">\n                    <svg class="icon">\n                        <use xlink:href="#icon-close"></use>\n                    </svg>\n                </div>\n            </div>\n        </li>').insertBefore($lastLi);
-        $li.on('click', function () {
-            window.open(node.url);
-        });
-        $li.on('click', '.close', function (e) {
-            e.stopPropagation(); //阻止冒泡
-            hashMap.splice(index, 1);
-            render();
-        });
+  $siteList.find('li:not(.last)').remove();
+  hashMap.forEach(function (node, index) {
+    var $li = $("<li>\n            <div class=\"site\">\n                <div class=\"logo\">".concat(node.logo, "</div>\n                <div class=\"link\">").concat(simplifyUrl(node.url), "</div>\n                <div class=\"close\">\n                    <svg class=\"icon\">\n                        <use xlink:href=\"#icon-close\"></use>\n                    </svg>\n                </div>\n            </div>\n        </li>")).insertBefore($lastLi);
+    $li.on('click', function () {
+      window.open(node.url);
     });
+    $li.on('click', '.close', function (e) {
+      e.stopPropagation(); //阻止冒泡
+
+      hashMap.splice(index, 1);
+      render();
+    });
+  });
 };
+
 render();
-
 $('.addButton').on('click', function () {
-    var url = window.prompt('请输入要添加网址');
-    console.log(url);
-    if (url.indexOf('http') !== 0) {
-        url = 'https://' + url;
-    }
-    hashMap.push({
-        logo: simplifyUrl(url)[0].toUpperCase(),
-        url: url
+  var url = window.prompt('请输入要添加网址');
+  console.log(url);
 
-    });
+  if (url.indexOf('http') !== 0) {
+    url = 'https://' + url;
+  }
 
-    render();
+  hashMap.push({
+    logo: simplifyUrl(url)[0].toUpperCase(),
+    url: url
+  });
+  render();
 });
+
 window.onbeforeunload = function () {
-    var string = JSON.stringify(hashMap);
-    localStorage.setItem('x', string);
+  var string = JSON.stringify(hashMap);
+  localStorage.setItem('x', string);
 };
 
 $(document).on('keypress', function (e) {
-    var key = e.key; //const key = e.key
+  var key = e.key; //const key = e.key
 
-    console.log(key);
-    for (i = 0; i < hashMap.length; i++) {
-        if (key === hashMap[i].logo.toLowerCase()) {
-            window.open(hashMap[i].url);
-        }
+  console.log(key);
+
+  for (i = 0; i < hashMap.length; i++) {
+    if (key === hashMap[i].logo.toLowerCase()) {
+      window.open(hashMap[i].url);
     }
+  }
 });
 },{}]},{},["epB2"], null)
-//# sourceMappingURL=main.5b7fabd2.map
+//# sourceMappingURL=main.b12493a4.js.map
