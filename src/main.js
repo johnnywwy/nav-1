@@ -27,7 +27,7 @@ const render = () => {
                         <use xlink:href="#icon-close"></use>
                     </svg>
                 </div>
-            </div>rm
+            </div>
         </li>`).insertBefore($lastLi)
         $li.on('click', () => {
             window.open(node.url)
