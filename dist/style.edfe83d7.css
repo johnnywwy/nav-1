@@ -148,10 +148,15 @@ body {
 
 .siteList .site>.close {
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 2px;
+    top: 2px;
     cursor: default;
 }
+
+.siteList .site .close>.icon {
+    font-size: 20px;
+}
+
 
 @media (min-width:500px) {
     .siteList .site>.close {
@@ -194,4 +199,4 @@ body {
     align-items: center;
 }
 
-/*# sourceMappingURL=style.b9b1cdd1.css.map */
+/*# sourceMappingURL=style.edfe83d7.css.map */
